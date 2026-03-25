@@ -23,6 +23,26 @@ namespace ButtleGameModel
             _enemy = enemy;
         }
 
+        public void PlayerTurn()
+        {
+            Console.WriteLine("行動を入力 attack or heal");
+            string action = Console.ReadLine();
+            Console.WriteLine("▶ プレイヤーのターン");
+
+            if (action == "attack")
+            {
+                _player.AttackTo(_enemy);  
+            }
+            else if (action == "heal")
+            {
+                _player.HealTo(_player);
+            }
+            else
+            {
+                Console.WriteLine("正しい文字を入力してください。");
+            }
+        }
+
         public void StartBattle()
         {
             Console.WriteLine("================================");
@@ -42,14 +62,10 @@ namespace ButtleGameModel
                 _player.ShowStatus();
                 _enemy.ShowStatus();
                 Console.WriteLine();
-
-                //プレイヤーのターン
-                Console.WriteLine("▶ プレイヤーのターン");
-                _player.AttackTo(_enemy);
-                Console.WriteLine();
+                PlayerTurn();
 
                 //敵が倒れたか確認
-                if(!_enemy.IsAlive())
+                if (!_enemy.IsAlive())
                 {
                     break;
                 }

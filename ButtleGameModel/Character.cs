@@ -14,17 +14,19 @@ namespace ButtleGameModel
         public int HP;//現在のHP
         public int MaxHP;//最大HP
         public int Attack;//攻撃力
+        public int Amount;//回復力
 
         //コンストラクタ
         //クラスを基にインスタンスを作る時に
         //自動で一度だけ呼ばれる処理をコンストラクタという。
 
-        public Character(string name,int hp,int attack)
+        public Character(string name,int hp,int attack, int amount)
         {
             Name = name;
             MaxHP = hp;
             HP = hp;
             Attack = attack;
+            Amount = amount;
         }
 
         //メソッド
@@ -37,6 +39,12 @@ namespace ButtleGameModel
             target.TakeDamage(Attack);
         }
 
+        public void HealTo(Character target)
+        {
+            Console.WriteLine($"{Name}は薬草を使った！");
+            target.Heal(Amount);
+        }
+
         public void TakeDamage(int damage)
         {
             HP -= damage;
@@ -46,6 +54,16 @@ namespace ButtleGameModel
             }
 
             Console.WriteLine($"{Name}は{damage}のダメージを受けた！（残りHP{HP}/{MaxHP}）");
+        }
+
+        public void Heal(int amount)
+        {
+            HP += amount;
+            if(HP>MaxHP)
+            {
+                HP = MaxHP;
+            }
+            Console.WriteLine($"{Name}は{amount}回復した。(残りHP{HP}/{MaxHP})");
         }
 
         //生きているかどうかを返す。
