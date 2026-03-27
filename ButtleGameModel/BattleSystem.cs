@@ -11,6 +11,8 @@ namespace ButtleGameModel
         private Player _player;
         private Enemy _enemy;
 
+       
+
         //アンダースコアを書く理由
         //クラスのフィールド＝メンバ変数であることを一目で分かるようにするための
         //コーディング規約
@@ -23,7 +25,7 @@ namespace ButtleGameModel
             _enemy = enemy;
         }
 
-        public void PlayerTurn()
+        private void PlayerTurn()
         {
             Console.WriteLine("行動を入力 attack or heal");
             string action = Console.ReadLine();
@@ -70,12 +72,20 @@ namespace ButtleGameModel
                 if (!_enemy.IsAlive())
                 {
                     OnEnemyDefined();
+                    
                     break;
                 }
 
                 //敵のターン
-                _enemy.TakeTurn(_player);
+                bool enemyEscaped = _enemy.TakeTurn(_player);
+                if(enemyEscaped)
+                {
+                    break;
+                }
                 Console.WriteLine();
+               
+          
+
 
                 turn++;
             }
@@ -87,24 +97,30 @@ namespace ButtleGameModel
         {
             Console.WriteLine("================================");
 
-            if(_player.IsAlive())
+            if (_player.IsAlive() && !_enemy.IsAlive())
             {
                 //プレイヤーが生き残っていたら勝利
                 Console.WriteLine($"{_player.Name}の勝利");
             }
-            else
+            else if (!_player.IsAlive() && _enemy.IsAlive())
             {
                 Console.WriteLine($"{_enemy.Name}の勝利");
+            }
+            else
+            {
+                Console.WriteLine($"{_enemy.Name}は逃げ去った。");
             }
 
             Console.WriteLine("================================");
         }
 
+       
+
         private void OnEnemyDefined()
         {
             Console.WriteLine($"{_enemy.Name}を倒した！");
-            Console.WriteLine($"{_enemy.GoldReward}Gを獲得");
             _player.GainExp(_enemy.ExpReward);
+            _player.EarnGold(_enemy.GoldReward);
         }
     }
 }

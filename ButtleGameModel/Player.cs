@@ -9,6 +9,7 @@ namespace ButtleGameModel
         public int Exp { get; private set; }
         public int ExpToNextLevel {  get; private set; }
         public int HealPower { get; private set; }
+        public int Gold { get; private set; } = 0;
 
         public Player(string name,int hp,int attack,int healPower):base(name,hp,attack)
         {
@@ -37,6 +38,12 @@ namespace ButtleGameModel
             {
                 LevelUp();
             }
+        }
+
+        public void EarnGold(int amount)
+        {
+            Gold += amount;
+            Console.WriteLine($"{amount}Gを獲得！(全財産{Gold}G)");
         }
 
         public void LevelUp()
