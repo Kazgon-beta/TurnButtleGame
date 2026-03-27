@@ -19,10 +19,18 @@ namespace ButtleGameModel
             GoldReward = goldRewaed;
         }
 
-        public void TakeTurn(Character target)
+        public bool TakeTurn(Character target)
         {
-            Console.WriteLine($"{Name}のターン");
-            AttackTo(target);
+            float hpRatio = (float)HP / MaxHP;
+            if(hpRatio <= 0.3f)
+            {
+                return true;
+            }
+            else
+            {
+                AttackTo(target);
+                return false;
+            }
         }
 
         public void AttackTo(Character target)
@@ -31,6 +39,7 @@ namespace ButtleGameModel
             target.TakeDamage(Attack);
         }
 
+       
         public override void ShowStatus()
         {
             base.ShowStatus();
