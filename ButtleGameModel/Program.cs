@@ -5,8 +5,8 @@
 
 using ButtleGameModel;
 
-Character player = new Character("勇者", hp: 100, attack: 20);
-Character enemy = new Character("スライム",hp:80,attack: 20);
+Player player = new Player("勇者", hp: 100, attack: 20,30);
+Enemy enemy = new Enemy("スライム",hp:80,attack: 20,15,10);
 
 //クラスが一つでも異なるインスタンスを作成することができる。
 

@@ -9,11 +9,16 @@ namespace ButtleGameModel
 {
     internal class Character
     {
+
         //フィールド
-        public string Name;//名前
-        public int HP;//現在のHP
-        public int MaxHP;//最大HP
-        public int Attack;//攻撃力
+        //protected とは、このクラスと子クラスからしか編集できないということ。
+        //子クラスからは使えるが、外からは触れない状態。（カプセル化）
+        //get set の部分をプロパティと言う。getは読み込み、setは書きこみ。
+
+        public string Name { get; protected set;}//名前
+        public int HP{ get; protected set; }//現在のHP
+        public int MaxHP{ get; protected set; }//最大HP
+        public int Attack { get; protected set; }//攻撃力
 
         //コンストラクタ
         //クラスを基にインスタンスを作る時に
@@ -37,6 +42,7 @@ namespace ButtleGameModel
             target.TakeDamage(Attack);
         }
 
+
         public void TakeDamage(int damage)
         {
             HP -= damage;
@@ -48,16 +54,28 @@ namespace ButtleGameModel
             Console.WriteLine($"{Name}は{damage}のダメージを受けた！（残りHP{HP}/{MaxHP}）");
         }
 
-        //生きているかどうかを返す。
-
-        public bool IsAlive()
+        public void Heal(int amount)
         {
-            return HP > 0;
+            HP += amount;
+            if (HP > MaxHP)
+            {
+                HP = MaxHP;
+            }
+            Console.WriteLine($"{Name}は{amount}回復した。（残りHP{HP}/{MaxHP}）");
         }
 
+
+
+        //生きているかどうかを返す。
+        //式形式メンバー　処理が一行のメソッドを短く書く。
+
+        public bool IsAlive() => HP > 0;
+
         //HPバーの表示
-        public void ShowStatus()
+        public virtual void ShowStatus()
         {
+            //[virtualとは]
+            //子クラス（override）で上書きしてもよいとい宣言
             string hpBar = GetHPBar();
             Console.WriteLine($"[{Name}] HP: {HP}/{MaxHP} {hpBar}");
         }

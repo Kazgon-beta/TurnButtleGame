@@ -8,8 +8,8 @@ namespace ButtleGameModel
 {
     internal class BattleSystem
     {
-        private Character _player;
-        private Character _enemy;
+        private Player _player;
+        private Enemy _enemy;
 
         //アンダースコアを書く理由
         //クラスのフィールド＝メンバ変数であることを一目で分かるようにするための
@@ -17,10 +17,31 @@ namespace ButtleGameModel
 
 
         //コンストラクタ:バトルの参加者をセットする。
-        public BattleSystem(Character player,Character enemy)
+        public BattleSystem(Player player,Enemy enemy)
         {
             _player = player;
             _enemy = enemy;
+        }
+
+        public void PlayerTurn()
+        {
+            Console.WriteLine("行動を入力 attack or heal");
+            string action = Console.ReadLine();
+            Console.WriteLine("▶ プレイヤーのターン");
+
+            if (action == "attack")
+            {
+                _player.AttackTo(_enemy);
+                
+            }
+            else if (action == "heal")
+            {
+                _player.UseHerb();
+            }
+            else
+            {
+                Console.WriteLine("正しい文字を入力してください。");
+            }
         }
 
         public void StartBattle()
@@ -43,20 +64,17 @@ namespace ButtleGameModel
                 _enemy.ShowStatus();
                 Console.WriteLine();
 
-                //プレイヤーのターン
-                Console.WriteLine("▶ プレイヤーのターン");
-                _player.AttackTo(_enemy);
-                Console.WriteLine();
+                PlayerTurn();
 
                 //敵が倒れたか確認
-                if(!_enemy.IsAlive())
+                if (!_enemy.IsAlive())
                 {
+                    OnEnemyDefined();
                     break;
                 }
 
                 //敵のターン
-                Console.WriteLine("▶ 敵のターン");
-                _enemy.AttackTo(_player);
+                _enemy.TakeTurn(_player);
                 Console.WriteLine();
 
                 turn++;
@@ -80,6 +98,13 @@ namespace ButtleGameModel
             }
 
             Console.WriteLine("================================");
+        }
+
+        private void OnEnemyDefined()
+        {
+            Console.WriteLine($"{_enemy.Name}を倒した！");
+            Console.WriteLine($"{_enemy.GoldReward}Gを獲得");
+            _player.GainExp(_enemy.ExpReward);
         }
     }
 }
