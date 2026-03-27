@@ -9,24 +9,27 @@ namespace ButtleGameModel
 {
     internal class Character
     {
+
         //フィールド
-        public string Name;//名前
-        public int HP;//現在のHP
-        public int MaxHP;//最大HP
-        public int Attack;//攻撃力
-        public int Amount;//回復力
+        //protected とは、このクラスと子クラスからしか編集できないということ。
+        //子クラスからは使えるが、外からは触れない状態。（カプセル化）
+        //get set の部分をプロパティと言う。getは読み込み、setは書きこみ。
+
+        public string Name { get; protected set;}//名前
+        public int HP{ get; protected set; }//現在のHP
+        public int MaxHP{ get; protected set; }//最大HP
+        public int Attack { get; protected set; }//攻撃力
 
         //コンストラクタ
         //クラスを基にインスタンスを作る時に
         //自動で一度だけ呼ばれる処理をコンストラクタという。
 
-        public Character(string name,int hp,int attack, int amount)
+        public Character(string name,int hp,int attack)
         {
             Name = name;
             MaxHP = hp;
             HP = hp;
             Attack = attack;
-            Amount = amount;
         }
 
         //メソッド
@@ -39,11 +42,6 @@ namespace ButtleGameModel
             target.TakeDamage(Attack);
         }
 
-        public void HealTo(Character target)
-        {
-            Console.WriteLine($"{Name}は薬草を使った！");
-            target.Heal(Amount);
-        }
 
         public void TakeDamage(int damage)
         {
@@ -59,23 +57,25 @@ namespace ButtleGameModel
         public void Heal(int amount)
         {
             HP += amount;
-            if(HP>MaxHP)
+            if (HP > MaxHP)
             {
                 HP = MaxHP;
             }
-            Console.WriteLine($"{Name}は{amount}回復した。(残りHP{HP}/{MaxHP})");
+            Console.WriteLine($"{Name}は{amount}回復した。（残りHP{HP}/{MaxHP}）");
         }
+
+
 
         //生きているかどうかを返す。
+        //式形式メンバー　処理が一行のメソッドを短く書く。
 
-        public bool IsAlive()
-        {
-            return HP > 0;
-        }
+        public bool IsAlive() => HP > 0;
 
         //HPバーの表示
-        public void ShowStatus()
+        public virtual void ShowStatus()
         {
+            //[virtualとは]
+            //子クラス（override）で上書きしてもよいとい宣言
             string hpBar = GetHPBar();
             Console.WriteLine($"[{Name}] HP: {HP}/{MaxHP} {hpBar}");
         }
